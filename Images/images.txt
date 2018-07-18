@@ -1,0 +1,1 @@
+This folder contains images used in the Tic Tac Toe application.
