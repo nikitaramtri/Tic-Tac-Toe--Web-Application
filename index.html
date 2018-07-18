@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!--meta tages for author and content-->
+    <meta charset="UTF-8">
+    <meta name="description" content="Tic Tac Toe game">
+    <meta name="author" content="Nikita Ramtri">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tic Tac Toe</title>
+    <style>
+        /*Change font-family*/
+        * {
+            box-sizing: border-box;
+            line-height: 5vmin;
+        }
+        body{
+            left:0;
+            padding: 0;
+            height:100vh;
+            width: 100vw;
+        }
+        .background-box {
+            height: 100vh;
+            width: 100vw;
+            /*padding: 10vmin 0;*/
+        }
+
+        /*universal background-partcles,js*/
+        #particles-js{
+            background-color: rgba(104,109,159, 0.7);
+            position: relative;
+            top:0;
+            left:0;
+            width: 100%;
+            height: 100%;
+            z-index: -50;
+        }
+
+        /* box-intro */
+        .intro-box{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10%;
+            height:80vmin;
+            width:80vmin;
+            margin:auto;
+            background-color: rgb(205,205,205);
+            padding: 3vmin 5vmin;
+            box-shadow: 10px 10px 2px lightslategrey;
+        }
+
+        /*Tic Tc Toe game image*/
+        .image-intro{
+            /*position: absolute;*/
+            height:45vmin;
+            width:45vmin;
+            margin:auto;
+            -webkit-animation: mymove 1s, sizemove 1s; /* Safari 4.0 - 8.0 */
+            animation: mymove 1s, sizemove 1s;
+        }
+
+        @keyframes mymove {
+            from{transform: rotate(0deg);}
+            to {transform: rotate(360deg);}
+        }
+
+        @keyframes sizemove {
+            from{height: 80vmin; weight:80vmin;}
+            to{height:45vmin; weight:45vmin;}
+        }
+        /*!* Safari 4.0 - 8.0 *!*/
+        @-webkit-keyframes mymove {
+            from{transform: rotate(0deg);}
+            to {transform: rotate(360deg);}
+        }
+        @-webkit-keyframes sizemove {
+            from{height: 80vmin; weight:80vmin;}
+            to{height:45vmin; weight:45vmin;}
+        }
+
+        /*buttons css for all pages*/
+        .btn-group{
+            width:100%;
+            padding: 0 1vmin;
+        }
+
+        .button{
+            display:inline-block;
+            padding: 0.7vmin 3vmin;
+            font-size: 3vmin;
+            font-weight: bold;
+            width:auto;
+            background-color: rgba(104,109,159, 0.4);
+            border-radius: 8%;
+            /*border: 0.2vmin solid #7d92bd;*/
+            text-shadow: none;
+            box-shadow: 2px 2px 2px lightslategrey;
+            outline-offset: 0;
+            margin:auto;
+        }
+        /*buttons css for all pages end*/
+        /*box-intro end*/
+
+        /*Multiplayer game page*/
+        .player-info{
+            width:76vmin;
+            height:55vmin;
+        }
+        .col-50{
+            width:34vmin;
+            max-height:100%;
+            padding: 1vmin 2vmin;
+            /*border:1px solid black;*/
+            float:left;
+            display:inline-block;
+            box-shadow: -3px 2px 2px lightslategrey;
+        }
+        input{
+            border-radius: 10%;
+            border-color: rgba(104,109,159, 0.7);
+            background-color: rgba(104,109,159, 0.3);
+            width:30vmin;
+            font-size: 2.5vmin;
+        }
+        .img-container{
+            width:25vmin;
+            height:25vmin;
+            margin: auto;
+        }
+        /*Multiplayer game page*/
+
+        /*winner page and draw page*/
+        .winner-box, .draw-box{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10%;
+            height:40vmin;
+            width:70vmin;
+            margin:auto;
+            background-color: rgb(205,205,205);
+            padding: 2vmin;
+            box-shadow: 10px 10px 5px lightslategrey;
+        }
+        .winner-box{
+            background: rgb(205,205,205) url("Images/cheer1.gif") center fixed;
+        }
+        /*.box-winner,.box-draw{*/
+            /*padding: 20vmin 0;*/
+        /*}*/
+
+        /*winner page and draw page*/
+
+        /* box-play main*/
+        .background-container,.multiplayer-box,.computer-box,.winner-box, .draw-box{
+            display:none;
+        }
+        .background-container{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10%;
+            height: 80vmin;
+            width: 100vmin;
+            margin:auto;
+            background-color: rgb(205,205,205);
+            padding: 5vmin 3vmin;
+
+        }
+        .container{
+            float: left;
+            display: inline-block;
+        }
+        .aside{
+            position: relative;
+            height: 60vmin;
+            /*background-color: whitesmoke;*/
+            width: 20vmin;
+            padding: 3vmin 0;
+        }
+        .image-div{
+            width:85%;
+            height:50%;
+            margin:auto;
+
+
+        }
+        .middle{
+            position: relative;
+            width: 54vmin;
+            height: 54vmin;
+            /*background-color: coral;*/
+            /*margin: auto;*/
+            padding: 1vmin;
+
+        }
+        .row{
+            /*position: relative;*/
+            /*background-color: whitesmoke;*/
+            width:51vmin;
+            height: 16.6vmin;
+            /*border: 1px solid blue;*/
+        }
+
+        /*check dimensions for resize browser*/
+        .click-box{
+
+            float:left;
+            display:inline-block;
+            /*background-color: darkblue;*/
+            width: 16.6vmin;
+            height: 16.6vmin;
+            box-shadow: 2px 2px 2px lightslategrey;
+            /*border: 1px solid navajowhite;*/
+        }
+
+        .row-1 .click-box:nth-child(even){
+            background-color: rgba(104,109,159, 0.9);
+        }
+        .row-1 .click-box:nth-child(odd){
+            background-color: rgba(104,109,159, 0.3);
+        }
+        .row-2 .click-box:nth-child(even){
+            background-color: rgba(104,109,159, 0.3);
+        }
+        .row-2 .click-box:nth-child(odd){
+            background-color: rgba(104,109,159, 0.9);
+        }
+        .row-3 .click-box:nth-child(even){
+            background-color: rgba(104,109,159, 0.9);
+        }
+        .row-3 .click-box:nth-child(odd){
+            background-color: rgba(104,109,159, 0.3);
+        }
+        img{
+            width: 16.8vmin;
+            height: 16.8vmin;
+        }
+         .click-box:not(.checked):hover{
+            /*border: 1px groove darkmagenta;*/
+             box-shadow: 5px 5px 2px darkslateblue;
+        }
+
+        .checked{
+            cursor: not-allowed;
+            pointer-events: none;
+            /*disables reclicking*/
+        }
+        /*.row::after{*/
+            /*content: "";*/
+            /*display: table;*/
+            /*clear: both;*/
+        /*}*/
+    </style>
+</head>
+<body>
+
+<!--Welcome page-->
+<div id ="particles-js" class = "background-box box-intro">
+
+</div>
+<div class = "intro-box">
+<div class="text">
+<i><center><b><span style="font-size: 5vmin">Lets Play</span></b></center></i><br>
+<center><b><span style="font-size: 10vmin">Tic Tac Toe</span></b></center>
+</div>
+
+<div class="image-intro">
+<img src="Images/2000px-Tic_tac_toe.svg.png" style="width: 100%; height: 100%">
+</div>
+<br>
+<div class="btn-group">
+<div class="button" id="multi-player" onclick="playMultiplayer()" style="max-width:25vmin; left: 2vmin;">Multiplayer</div>
+<div class="button" id="computer" onclick="playComputer()" style="max-width:25vmin;">Computer</div>
+<div class="button" style="float: right; max-width: 20vmin; right: 2vmin;" onclick="window.location.reload()">Exit</div>
+</div>
+</div>
+<!--Computer game page-->
+<div class = "background-box box-computer">
+    <div class = "intro-box computer-box">
+        <i><center><b><span style="font-size: 7vmin;">Lets Play</span></b></center></i><br>
+        <div class = "player-info">
+            <div class = "col-50" style="border-right: 2px solid rgba(104,109,159, 0.5);">
+                <b><span style="font-size: 4vmin;">Player 1:</span></b><br><br>
+                <b><span style="font-size: 3.5vmin">Name:</span></b><br>
+                <input type="text" name="p1name" id="computer-p1name" placeholder="Player1 Name">
+                <br><br>
+                <div class="img-container">
+                    <img src="Images/Tic-tac-toe-cross.png" style="width: 80%; height: 80%">
+                </div>
+            </div>
+            <div class = "col-50" style="box-shadow: 3px 2px 2px lightslategrey">
+                <b><span style="font-size: 4vmin;">Player 2:</span></b><br><br>
+                <b><span style="font-size: 3.5vmin">Name:</span></b><br>
+                <input type="text" name="p2name" id="computer-p2name" value="Challenger">
+                <br><br>
+                <div class="img-container">
+                    <img src="Images/Tic-tac-toe-nought.png" style="width: 80%; height: 80%">
+                </div>
+            </div>
+        </div>
+        <div class="btn-group">
+            <div class="button" id="computer-play" onclick="playComputerFunction()">Play</div>
+            <div class ="button exit" style="float: right" onclick="window.location.reload()">Exit</div>
+        </div>
+
+    </div>
+</div>
+
+<!--Multiplayer game page-->
+<div class = "background-box box-multiplayer">
+    <div class = "intro-box multiplayer-box">
+        <i><center><b><span style="font-size: 7vmin;">Lets Play</span></b></center></i><br>
+        <div class = "player-info">
+            <div class = "col-50" style="border-right: 2px solid rgba(104,109,159, 0.5);">
+                <b><span style="font-size: 4vmin;">Player 1:</span></b><br><br>
+                <b><span style="font-size: 3.5vmin">Name:</span></b><br>
+                <input type="text" name="p1name1" id="m-p1name" value="player1" placeholder="Player1 Name">
+                <br><br>
+                <div class="img-container">
+                    <img src="Images/Tic-tac-toe-cross.png" style="width: 80%; height: 80%">
+                </div>
+            </div>
+            <div class = "col-50" style="box-shadow: 3px 2px 2px lightslategrey">
+                <b><span style="font-size: 4vmin;">Player 2:</span></b><br><br>
+                <b><span style="font-size: 3.5vmin">Name:</span></b><br>
+                <input type="text" name="p2name1" id="m-p2name" value="player2" placeholder="Player2 Name">
+                <br><br>
+                <div class="img-container">
+                    <img src="Images/Tic-tac-toe-nought.png" style="width: 80%; height: 80%">
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <div class="button" id="multi-player-play" onclick="playMultiplayerFunction()">Play</div>
+            <div class="button exit" style="float: right" onclick="window.location.reload()">Exit</div>
+        </div>
+
+    </div>
+</div>
+
+<!--Tic Tac Toe game page-->
+<div class = "background-box box-play">
+    <div class = "background-container">
+        <div class = "container aside left-aside">
+            <b><span style="font-size: 5vmin">Player 1:</span></b><br><br>
+            <b><center><span style="font-size: 4vmin" id = "player1name"></span></center></b><br>
+            <div class = "image-div">
+                <img src = "Images/Tic-tac-toe-cross.png" style = "width:90%; height: 85%;">
+            </div>
+            <!--<h5>No. of chances taken: <span id = "player1chances"></span></h5>-->
+
+        </div>
+        <div class = "container middle">
+            <div class = "row row-1">
+                <!--<style="border-bottom: 0.5vmin solid #715cb6;">-->
+                <div class = "click-box unchecked" id = "box-1" onclick="myFunction1()" style="border-top-left-radius: 5%;">
+                    <!--<img src = "Images/asfalt-light.png" >-->
+                </div>
+                <div class = "click-box unchecked" id = "box-2" onclick="myFunction2()">
+                    <!--<img src = "Images/asfalt-light.png" >-->
+                </div>
+                <div class = "click-box unchecked" id = "box-3" onclick="myFunction3()" style="border-top-right-radius: 5%;">
+                    <!--<img src = "Images/asfalt-light.png" >-->
+                </div>
+            </div>
+            <div class = "row row-2">
+                <div class = "click-box unchecked" id = "box-4" onclick="myFunction4()">
+                    <!--<img src = "Images/asfalt-light.png" >-->
+                </div>
+                <div class = "click-box unchecked" id = "box-5" onclick="myFunction5()" >
+                    <!--<img src = "Images/asfalt-light.png" >-->
+                </div>
+                <div class = "click-box unchecked" id = "box-6" onclick="myFunction6()">
+                    <!--<img src = "Images/asfalt-light.png" >-->
+                </div>
+            </div>
+            <div class = "row row-3" >
+                <div class = "click-box unchecked" id = "box-7" onclick="myFunction7()" style="border-bottom-left-radius: 5%">
+                    <!--<img src = "Images/asfalt-light.png" >-->
+                </div>
+                <div class = "click-box unchecked" id = "box-8" onclick="myFunction8()">
+                    <!--<img src = "Images/asfalt-light.png" >-->
+
+                </div>
+                <div class = "click-box unchecked" id = "box-9" onclick="myFunction9()" style="border-top-right-radius: 5%">
+                    <!--<img src = "Images/asfalt-light.png" >-->
+                </div>
+            </div>
+        </div>
+        <div class = "container aside right-aside">
+            <b><span style="font-size: 5vmin">Player 2:</span></b><br><br>
+            <b><center><span style="font-size: 4vmin" id = "player2name"></span></center></b><br>
+            <div class = "image-div">
+                <img src = "Images/Tic-tac-toe-nought.png" style = "width:90%; height: 85%;">
+            </div>
+            <!--<h5>No. of chances taken: <span id = "player2chances"></span></h5>-->
+        </div>
+        <br><br>
+        <div class="btn-group">
+            <div class="button" id = "new-game" onclick="newGameFunction()">New Game</div>
+            <div class = "button exit" style="float: right;" onclick="window.location.reload()">Exit</div>
+        </div>
+
+    </div>
+    <!--<div class="background-container">-->
+        <!---->
+    <!--</div>-->
+</div>
+
+<!--player win page-->
+<div class = "background-box box-winner">
+    <div class = "winner-box"><br>
+        <center><b><span style="font-size: 4.5vmin">Game over</span></b></center><br>
+        <center><b><span id = "winner" style="font-size: 5.5vmin"></span></b></center>
+        <br>
+        <div class="btn-group">
+            <div  class="button" style="max-width:25vmin;" onclick="newGameFunction()">Play another</div>
+            <div class="button" style="float: right; max-width: 20vmin;" onclick="window.location.reload()">Exit</div>
+        </div>
+
+    </div>
+</div>
+
+<!--player draw page-->
+<div class = "background-box box-draw">
+    <div class = "draw-box">
+        <center><b><span style="font-size: 4.5vmin">Game over</span></b></center><br>
+        <center><b><span style="font-size: 7vmin">It's a draw!</span></b></center>
+        <center><b><span style="font-size: 3.5vmin">How about one more game?</span></b></center>
+        <br>
+        <div class="btn-group">
+            <div class="button" style="max-width:25vmin;" onclick="newGameFunction()">Play another</div>
+            <div class="button" style="float: right; max-width: 20vmin;" onclick="window.location.reload()">Exit</div>
+        </div>
+    </div>
+</div>
+<script src="particles.js"></script>
+<script src="app.js"></script>
+<script>
+    //function for onclick multiplayer option to display the multiplayer game options
+    function playMultiplayer(){ //add player info
+        //window.alert("Ready");
+        document.getElementsByClassName('multiplayer-box')[0].style.display = "block";
+        document.getElementsByClassName('intro-box')[0].style.display= "none";
+        // var script = document.createElement("script");
+        // script.src = "multiplayer.js";
+        // document.body.appendChild(script);
+    }
+    //function to enable multiplayer game
+    function playMultiplayerFunction(){
+        //window.alert("double ready?");
+        document.getElementsByClassName('multiplayer-box')[0].style.display = "none";
+        document.getElementsByClassName('background-container')[0].style.display = "block";
+        var script = document.createElement("script");
+        script.src = "multiplayer.js";
+        document.body.appendChild(script);
+
+    }
+    //function for onclick computer option to display the computer game options
+    function playComputer(){
+        document.getElementsByClassName('computer-box')[0].style.display = "block";
+        document.getElementsByClassName('intro-box')[0].style.display= "none";
+        // var script = document.createElement("script");
+        // script.src = "computer.js";
+        // document.body.appendChild(script);
+
+    }
+
+    //function to enable game with computer
+    function playComputerFunction(){
+        document.getElementsByClassName('computer-box')[0].style.display = "none";
+        document.getElementsByClassName('background-container')[0].style.display = "block";
+        var script = document.createElement("script");
+        script.src = "computer.js";
+        document.body.appendChild(script);
+        console.log(player1 + " 0 " + player2);
+    }
+    //use jquery when learnt
+     function newGameFunction(){
+        document.getElementsByClassName("background-container")[0].style.display="block";
+        document.getElementsByClassName("draw-box")[0].style.display="none";
+        document.getElementsByClassName("winner-box")[0].style.display="none";
+        var checked_div = document.getElementsByClassName("checked");
+        var len = checked_div.length;
+            //window.alert(len);
+
+         //removing crosses and nought
+        for(var ind = 0; ind < len; ind++){
+            var image_div = checked_div[ind].getElementsByTagName("img");
+            checked_div[ind].removeChild(image_div[0]);
+        }
+
+        //setting all boxes unchecked
+         document.getElementById("box-1").className ="click-box unchecked";
+         document.getElementById("box-2").className ="click-box unchecked";
+         document.getElementById("box-3").className ="click-box unchecked";
+         document.getElementById("box-4").className ="click-box unchecked";
+         document.getElementById("box-5").className ="click-box unchecked";
+         document.getElementById("box-6").className ="click-box unchecked";
+         document.getElementById("box-7").className ="click-box unchecked";
+         document.getElementById("box-8").className ="click-box unchecked";
+         document.getElementById("box-9").className ="click-box unchecked";
+
+         //re-initializing all variables
+         i=1;
+         player1Row1=0;
+         player1Row2=0;
+         player1Row3=0;
+         player1Col1=0;
+         player1Col2=0;
+         player1Col3=0;
+         player1Diag1=0;
+         player1Diag2=0;
+         player2Row1=0;
+         player2Row2=0;
+         player2Row3=0;
+         player2Col1=0;
+         player2Col2=0;
+         player2Col3=0;
+         player2Diag1=0;
+         player2Diag2=0;
+
+     }
+
+     function draw(){
+        document.getElementsByClassName("background-container")[0].style.display = "none";
+        document.getElementsByClassName("draw-box")[0].style.display = "block";
+     }
+
+</script>
+
+
+</body>
+</html>
